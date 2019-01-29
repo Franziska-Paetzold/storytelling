@@ -1,0 +1,31 @@
+{
+  "name": "storytelling",
+  "version": "1.0.0",
+  "description": "web app to play a storytelling game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Franziska-Paetzold/storytelling.git"
+  },
+  "keywords": [
+    "storytelling",
+    "game",
+    "client",
+    "server"
+  ],
+  "author": "Franziska Pätzold",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Franziska-Paetzold/storytelling/issues"
+  },
+  "homepage": "https://github.com/Franziska-Paetzold/storytelling#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.7",
+    "socket.io": "^2.2.0"
+  }
+}
