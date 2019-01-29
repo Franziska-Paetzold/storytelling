@@ -8,11 +8,11 @@ const server = express().use(express.static('public')).listen(PORT, port);
 let Schema = mongoose.Schema;
 const dbUrl = "mongodb://admin:admin123@ds141674.mlab.com:41674/storytelling"
 
-let sentenceSchema = new Schema(
+let scentenceSchema = new Schema(
     {
         scentence: String
     });
-let Scentence = mongoose.model('story_scentence', ScentenceSchema);
+let Scentence = mongoose.model('story_scentence', scentenceSchema);
     
 
 io = socketIO.listen(server); 
@@ -24,8 +24,18 @@ function port()
 }
 
 
-
-
+mongoose.connect(dbUrl, {useNewUrlParser: true}, dbConnected);
+function dbConnected(err)
+{
+    if (err)
+    {
+        console.log('Unable to connect to the mongoDB server. Error:', err);
+    } 
+    else 
+    {
+        console.log('Connection established to', dbUrl);
+    }
+}
 function connectionLive(socket)
 {
     console.log('Client connected');
