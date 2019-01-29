@@ -24,6 +24,10 @@ function setup() {
   story.push(lastScentence.html());
   //colorWords(lastScentence);
 
+  socket.on('broadcastScentence', receivedScentence);
+  socket.on('getScentences', sentScentences);
+//TODO   socket.on('initSketch', receivingInitSketch);
+
   title = select("#title");
 
   inputField = select("#inputField");
@@ -60,6 +64,7 @@ function enterScentence()
 		inputField.value("");
 		fill(0);
 		title.html("Continue the story!");
+		socket.emit('setNewScentence', lastScentence.html());
 	}
 	else
 	{
@@ -95,6 +100,7 @@ function hideStory()
 }
 
 
+
 window.onload=function(){
 	document.getElementById("inputField").addEventListener("keyup", function(event) 
 	{
@@ -107,3 +113,46 @@ window.onload=function(){
 		}
 	});
 }
+
+function sentScentences()
+{
+    console.log('Sending all scentences data');
+    for (s in story) 
+    {
+        let data = 
+        { 
+            index: story[s]
+        }
+        socket.emit('setNewScentence', data);
+    }
+}
+
+function receivedScentence(scentence)
+{
+	lastScentence.html(scentence);
+	story.push(lastScentence.html());
+}
+
+//TODO
+// function receivingInitSketch(data)
+// {
+
+	// lastScentence.html(data);
+	// story.push(lastScentence.html());
+	//'''##############################
+//     for (let i = 0; i < data.length; i++) 
+//     {
+//         // We can't be sure that data array from the
+//         // database has the same order as the magnets
+//         // array. We need to identify each element
+//         // by its index.
+//         var index = gPoetry.magnets.findIndex(obj => 
+//         {
+//             return obj.index === data[i].index
+//         });
+
+//         gPoetry.magnets[index].index = data[i].index;
+//         gPoetry.magnets[index].x = data[i].x;
+//         gPoetry.magnets[index].y = data[i].y;
+//     }
+// }
