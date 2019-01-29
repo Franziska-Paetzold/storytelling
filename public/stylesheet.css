@@ -1,0 +1,60 @@
+body {
+    margin:0;
+    padding:0;
+    font-family: Calibri;
+    font-size: 1em;
+    overflow-x: hidden;
+}
+ 
+canvas {
+    margin:auto;
+}
+
+.centerElement{
+    margin: auto;
+    text-align: center;
+}
+
+#lastScentence {
+    display: block;
+    font-size: 3.5em;
+    width: 60%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+#title {
+}
+
+#inputField{
+    display: block;
+    text-align: left;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+#enterButton{
+    display: block;
+    margin-bottom: 1%;
+}
+
+#readButton{
+    display: inline-block;
+    margin-left: 5%;
+    margin-top: 5%;
+    
+}
+
+#hideButton{
+    display: inline-block;
+    margin-left: 1%;
+    margin-top: 5%;
+    
+}
+
+#story {
+    margin-left: 5%;
+    margin-top: 1%;
+}

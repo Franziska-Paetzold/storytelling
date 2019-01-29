@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Storytelling</title>
+
+	<link rel="icon" href="https://cdn4.iconfinder.com/data/icons/program-coding-icons-1/200/vector_493_18-512.png">
+	<link rel="stylesheet" href="stylesheet.css">
+
+	
+	<script src="../node_modules/socket.io-client/dist/socket.io.js"></script> 
+	<!-- <script src="../node_modules/express/lib/express.js"></script>  -->
+	
+	<script src="./libraries/p5.js"></script>
+	<script src="./libraries/p5.dom.js"></script>
+
+	<script src="storytelling.js"></script>
+	<script src="../server.js"></script>
+
+</head>
+<body>
+	<h1 id="lastScentence"  class="centerElement" > Everything went wrong. </h1>
+	<h2 id="title" class="centerElement"> Continue the story! </h2>
+	<input id="inputField" class="centerElement">
+	<button type="button" class="centerElement" id="enterButton">Add my scentence!</button>
+	<button type="button" id="readButton">Read the whole story.</button>
+	<button type="button" id="hideButton">Hide the story.</button>
+	<p id="story"></p>
+
+	
+    <div id='titleDiv'></div>
+    <div id='canvasDiv'></div>
+    <div id='footerDiv'></div>
+</body>
+</html>
