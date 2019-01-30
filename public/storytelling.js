@@ -42,11 +42,17 @@ function setup() {
   setFont("lastScentence",currFont);
   lastScentence = select("#lastScentence");
   story.push([lastScentence.html(), currFont]);
-  //colorWords(lastScentence);
+  let data =
+  {
+	  index: index,
+	  scentence: lastScentence.html(),
+	  font: currFont
+  }
+  socket.emit('setNewScentence', data);
 
   socket.on('broadcastScentence', receivedScentence);
   socket.on('getScentences', sentScentences);
-//TODO   socket.on('initSketch', receivingInitSketch);
+  socket.on('initSketch', receivingInitSketch);
 
   title = select("#title");
 
@@ -65,16 +71,6 @@ function setup() {
 
 }
 
-function colorWords(words)
-{
-	const hue = random(255);
-	for (word in words)
-	{
-		const brightness = random(255);
-		fill(hue, 255, brightness);
-	}
-}
-
 function enterScentence()
 {
 	if (inputField.value().trim() != "")
@@ -85,7 +81,16 @@ function enterScentence()
 		story.push([lastScentence.html(), currFont]);
 		inputField.value("");
 		title.html("Continue the story!");
-		socket.emit('setNewScentence', lastScentence.html());
+
+		//for server-client communication
+		let index = story.indexOf([lastScentence.html(), currFont]);
+		let data =
+		{
+			index: index,
+			scentence: lastScentence.html(),
+			font: currFont
+		}
+		socket.emit('setNewScentence', data);
 	}
 	else
 	{
@@ -113,8 +118,6 @@ function showStory()
 		{
 			let scentenceParagraph = createElement("p", story[s][0]).parent("#story").addClass("scentences").id("scentence"+s);
 			setFont(("scentence"+s),story[s][1]);
-			//scentenceParagraph.html();
-			//storyDiv.html(storyP.html()+story[s[0]]+" <br /> ");
 		}
 	}
 	else
@@ -150,7 +153,9 @@ function sentScentences()
     {
         let data = 
         { 
-            index: story[s]
+			index: story[s],
+			scentence: story[s][0],
+			font: story[s][1]
         }
         socket.emit('setNewScentence', data);
     }
@@ -158,30 +163,23 @@ function sentScentences()
 
 function receivedScentence(scentence)
 {
-	lastScentence.html(scentence);
-	story.push(lastScentence.html());
+	console.log("received some data:", scentence);
+	story[scentence.index][0]= scentence.scentence;
+	story[scentence.index][1]= scentence.font;
+	
 }
 
-//TODO
-// function receivingInitSketch(data)
-// {
 
-	// lastScentence.html(data);
-	// story.push(lastScentence.html());
-	//'''##############################
-//     for (let i = 0; i < data.length; i++) 
-//     {
-//         // We can't be sure that data array from the
-//         // database has the same order as the magnets
-//         // array. We need to identify each element
-//         // by its index.
-//         var index = gPoetry.magnets.findIndex(obj => 
-//         {
-//             return obj.index === data[i].index
-//         });
+function receivingInitSketch(data)
+{
+	for (let i = 0; i < data.length; i++) 
+    {
+		let index = story.findIndex(obj => 
+			{
+				return obj.index === data[i].index
+			});
 
-//         gPoetry.magnets[index].index = data[i].index;
-//         gPoetry.magnets[index].x = data[i].x;
-//         gPoetry.magnets[index].y = data[i].y;
-//     }
-// }
+		story[index][0]=data[i].scentence;
+		story[index][1]=data[i].font;
+	}
+}

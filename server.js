@@ -8,14 +8,16 @@ const server = express().use(express.static('public')).listen(PORT, port);
 let Schema = mongoose.Schema;
 const dbUrl = "mongodb://admin:admin123@ds141674.mlab.com:41674/storytelling"
 
-let scentenceSchema = new Schema(
+let ScentenceSchema = new Schema(
     {
-        scentence: String
+        index: Number,
+        scentence: String,
+        font: String
     });
-let Scentence = mongoose.model('story_scentence', scentenceSchema);
+let Scentence = mongoose.model('story_scentence', ScentenceSchema);
     
 
-io = socketIO.listen(server); 
+const io = socketIO(server); 
 io.on('connection', connectionLive); 
 
 function port()
@@ -36,12 +38,13 @@ function dbConnected(err)
         console.log('Connection established to', dbUrl);
     }
 }
+
 function connectionLive(socket)
 {
     console.log('Client connected');
 
     Scentence.find(getAllSentencesFromDB);
-    function getAllSentencesFromDB(err, scentence)
+    function getAllSentencesFromDB(err, data)
     {
         if (err) return console.error(err);
 
@@ -53,7 +56,7 @@ function connectionLive(socket)
         else
         {
             console.log('Init Client');
-            //TODO socket.emit('initSketch', data);
+            socket.emit('initSketch', data);
         }
     }
 
@@ -67,10 +70,10 @@ function connectionLive(socket)
 
     function getNewScentence(data)
     {
-        console.log('Got scentence: ', data);
-        socket.socket.broadcast.emit('broadcastScentence', data);
+        console.log('Got data: ', data);
+        socket.broadcast.emit('broadcastScentence', data);
 
-        Scentence.findOne({ scentence:String(data) }, saveData);
+        Scentence.findOne({ index:Number(data.index) }, saveData);
         function saveData(err, dataDb)
         {
             // console.log('Save data', dataDb);
@@ -78,12 +81,13 @@ function connectionLive(socket)
 
             if(dataDb !== null) // update
             {
-                dataDb.scentence = data;
+                dataDb.scentence = data.scentence;
+                dataDb.font = data.font;
                 dataDb.save();
             }
             else // initialize
             {
-                let tmpScentence = data;
+                let tmpScentence = new Scentence(data);
                 tmpScentence.save(saveNewScentence);
                 function saveNewScentence(err, element) 
                 {
