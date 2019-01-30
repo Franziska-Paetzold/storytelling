@@ -44,7 +44,7 @@ function setup() {
   story.push([lastScentence.html(), currFont]);
   let data =
   {
-	  index: index,
+	  index: 0,
 	  scentence: lastScentence.html(),
 	  font: currFont
   }
