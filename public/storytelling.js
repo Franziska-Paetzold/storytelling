@@ -1,3 +1,5 @@
+"use strict";
+
 let inputField;
 let enterButton;
 let readButton;
@@ -5,23 +7,41 @@ let hideButton;
 let title;
 let lastScentence;
 let story =[];
-let storyP;
-
+let storyDiv;
+let font1, font2, font3, font4, font5, font6;
+let fonts=[];
 
 
 let socket = io();
 let data = 'Data from the client to the server';
 socket.emit('sayingHello', data);
 
+function preload() {
+	// Ensure the .ttf or .otf font stored in the assets directory
+	// is loaded before setup() and draw() are called
+	font1 = loadFont('assets/Aileron-Light.otf');
+	fonts.push("Aileron-Light");
+	//somehow cut out in the browser, does not look good
+	//font2 = loadFont('assets/Amarillo.otf');
+	//fonts.push("Amarillo");
+	font3 = loadFont('assets/Volstead.otf');
+	fonts.push("Volstead");
+	font4 = loadFont("assets/CherryandKisses.ttf")
+	fonts.push("CherryandKisses");
+	font5 = loadFont("assets/wonderbar.otf")
+	fonts.push("wonderbar");
+	font6 = loadFont("assets/Candy.ttf");
+	fonts.push("Candy");
+  }
 
 function setup() {
-  // create canvas
-  createCanvas(windowWidth, windowHeight);
-
   colorMode(HSB);
   
+  //set one of the special fonts to the start scentence
+  let currFont = random(fonts);
+  setFont("lastScentence",currFont);
   lastScentence = select("#lastScentence");
-  story.push(lastScentence.html());
+  story.push([lastScentence.html(), currFont]);
   //colorWords(lastScentence);
 
   socket.on('broadcastScentence', receivedScentence);
@@ -41,7 +61,7 @@ function setup() {
   readButton = select("#hideButton");
   readButton.mousePressed(hideStory);
 
-  storyP = select("#story");
+  storyDiv = select("#story");
 
 }
 
@@ -59,33 +79,42 @@ function enterScentence()
 {
 	if (inputField.value().trim() != "")
 	{
+		let currFont = random(fonts);
+		setFont("lastScentence",currFont);
 		lastScentence.html(inputField.value());
-		story.push(lastScentence.html());
+		story.push([lastScentence.html(), currFont]);
 		inputField.value("");
-		fill(0);
 		title.html("Continue the story!");
 		socket.emit('setNewScentence', lastScentence.html());
 	}
 	else
 	{
-		fill(255,0,0);
 		title.html("Write something before you submit, please!");
 		console.log("write somthing!");
 	}
 }
 
 
+function setFont(id, font)
+{
+	console.log(font);
+	document.getElementById(id).style.fontFamily = font;
+}
+
 function showStory()
 {
 	if (story.length != 0)
 	{
-		if(storyP.html() != "")
+		if(storyDiv.innerHTML !== "")
 		{
 			hideStory();
 		}
-		for(s in story)
+		for(let s in story)
 		{
-			storyP.html(storyP.html()+story[s]+" <br /> ");
+			let scentenceParagraph = createElement("p", story[s][0]).parent("#story").addClass("scentences").id("scentence"+s);
+			setFont(("scentence"+s),story[s][1]);
+			//scentenceParagraph.html();
+			//storyDiv.html(storyP.html()+story[s[0]]+" <br /> ");
 		}
 	}
 	else
@@ -96,7 +125,7 @@ function showStory()
 
 function hideStory()
 {
-	storyP.html("");
+	storyDiv.html("");
 }
 
 
@@ -117,7 +146,7 @@ window.onload=function(){
 function sentScentences()
 {
     console.log('Sending all scentences data');
-    for (s in story) 
+    for (let s in story) 
     {
         let data = 
         { 
