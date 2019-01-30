@@ -28,8 +28,8 @@ function preload() {
 	fonts.push("Volstead");
 	font4 = loadFont("assets/CherryandKisses.ttf")
 	fonts.push("CherryandKisses");
-	font5 = loadFont("assets/wonderbar.otf")
-	fonts.push("wonderbar");
+	font5 = loadFont("assets/Wonderbar.otf")
+	fonts.push("Wonderbar");
 	font6 = loadFont("assets/Candy.ttf");
 	fonts.push("Candy");
   }
