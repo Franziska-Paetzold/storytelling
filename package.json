@@ -25,7 +25,7 @@
   "homepage": "https://github.com/Franziska-Paetzold/storytelling#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "mongoose": "^5.4.7",
+    "mongoose": "^5.7.5",
     "socket.io": "^2.2.0"
   }
 }
